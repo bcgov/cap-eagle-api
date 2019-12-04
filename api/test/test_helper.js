@@ -170,6 +170,7 @@ async function mongooseConnect() {
   }
 };
 
+// we only wish to run migrations on databases which have never run migrations before
 async function checkMigrations(callback) {
   checkMongoUri();
   let options = {};
@@ -182,7 +183,20 @@ async function checkMigrations(callback) {
   MongoClient.connect(mongoUri, options, function(err, db) {
     if (err) console.error(err);
     var dbo = db.db(app_helper.dbName);
-    dbo.collection("migrations").countDocuments({}, function(err, numOfDocs){
+    const runMigrations = 0;
+    const migrationsCollectionName = "migrations";
+    let mcn = migrationsCollectionName;
+    let collections = dbo.getCollectionNames();
+    if ((_.isEmpty(collections)) || (!collections.includes(mcn))) {
+      dbo.createCollection(mcn, function(err, res) {
+        if (err) console.error(err);
+        console.log(mcn + " collection created");
+        db.close();
+        callback(runMigrations);
+      });
+      return;
+    }
+    dbo.collection(mcn).countDocuments({}, function(err, numOfDocs){
       if (err) console.error(err);
       db.close();
       callback(numOfDocs);
