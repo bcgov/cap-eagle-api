@@ -92,6 +92,12 @@
       "value": "eagle-api"
     },
     {
+      "name": "NODE_ENV",
+      "displayName": "Node Environment",
+      "description": "Environment for running node. Toggle 'production' or 'development'.",
+      "value": "production"
+    },
+    {
       "name": "S2I_NAMESPACE",
       "displayName": "Namespace",
       "description": "The OpenShift Namespace where the S2I ImageStream resides.",
