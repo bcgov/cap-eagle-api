@@ -4,6 +4,7 @@ const DatabaseCleaner = require('database-cleaner');
 const dbCleaner = new DatabaseCleaner('mongodb');
 const mongoose = require('mongoose');
 const mongooseOpts = require('../../config/mongoose_options').mongooseOptions;
+const app_helper = require('../../app_helper');
 const mongoDbMemoryServer = require('mongodb-memory-server');
 const MongoClient = require('mongodb').MongoClient;
 const exec = require('child_process').exec;
@@ -151,7 +152,11 @@ async function mongooseConnect() {
   if (!(mongoose.connection && mongoose.connection.db)) {
     let genSettings = await dataGenerationSettings;
     if (genSettings.save_to_persistent_mongo) {
-      mongoUri = "mongodb://localhost/epic";
+      mongoUri = app_helper.dbConnection;
+      if (!_.isEmpty(app_helper.credentials)) {
+        mongooseOpts.user = app_helper.credentials.db_username;
+        mongooseOpts.pass = app_helper.credentials.db_password;
+      }
     } else {
       if (mongoServer) {
         mongoUri = await mongoServer.getConnectionString()

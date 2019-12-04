@@ -1,5 +1,30 @@
 var mongoose      = require("mongoose");
 var _             = require('lodash');
+var winston       = require('winston');
+
+
+// Logging middleware
+winston.loggers.add('default', {
+  console: {
+      colorize: 'true',
+      handleExceptions: true,
+      json: false,
+      level: 'silly',
+      label: 'default',
+  }
+});
+var defaultLog = winston.loggers.get('default');
+
+var dbConnection  = 'mongodb://'
+                    + (process.env.MONGODB_SERVICE_HOST || process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost')
+                    + '/'
+                    + (process.env.MONGODB_DATABASE || 'epic');
+var db_username = process.env.MONGODB_USERNAME || '';
+var db_password = process.env.MONGODB_PASSWORD || '';
+var credentials = {
+  db_username : db_username,
+  db_password : db_password
+};
 
 async function loadModels(dbConnection, options, logger) {
     log(logger, "Connecting to:" + dbConnection);
@@ -39,15 +64,18 @@ async function loadModels(dbConnection, options, logger) {
     }
   }
   
-  async function loadMongoose(dbConnection, credentials, logger) {
+  async function loadMongoose() {
     var options = require('./config/mongoose_options').mongooseOptions;
     if (!_.isEmpty(credentials)) {
       options.user = credentials.db_username;
       options.pass = credentials.db_password;
     }
     mongoose.Promise  = global.Promise;
-    await loadModels(dbConnection, options, logger);
+    await loadModels(dbConnection, options, defaultLog);
   }
 
 exports.loadMongoose = loadMongoose;
 exports.loadModels = loadModels;
+exports.dbConnection = dbConnection;
+exports.credentials = credentials;
+exports.defaultLog = defaultLog;
