@@ -165,6 +165,10 @@
                 ],
                 "env": [
                   {
+                    "name": "NODE_ENV",
+                    "value": "${NODE_ENV}"
+                  },
+                  {
                     "name": "MONGODB_USERNAME",
                     "value": "${DATABASE_USER}"
                   },
