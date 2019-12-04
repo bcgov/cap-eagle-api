@@ -15,10 +15,11 @@ winston.loggers.add('default', {
 });
 var defaultLog = winston.loggers.get('default');
 
+var dbName = (process.env.MONGODB_DATABASE || 'epic');
 var dbConnection  = 'mongodb://'
                     + (process.env.MONGODB_SERVICE_HOST || process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost')
                     + '/'
-                    + (process.env.MONGODB_DATABASE || 'epic');
+                    + dbName;
 var db_username = process.env.MONGODB_USERNAME || '';
 var db_password = process.env.MONGODB_PASSWORD || '';
 var credentials = {
@@ -76,6 +77,7 @@ async function loadModels(dbConnection, options, logger) {
 
 exports.loadMongoose = loadMongoose;
 exports.loadModels = loadModels;
+exports.dbName = dbName;
 exports.dbConnection = dbConnection;
 exports.credentials = credentials;
 exports.defaultLog = defaultLog;

@@ -172,9 +172,14 @@ async function mongooseConnect() {
 
 async function checkMigrations(callback) {
   checkMongoUri();
-  MongoClient.connect(mongoUri, function(err, db) {
+  let options = {};
+  if (!_.isEmpty(app_helper.credentials)) {
+    options.auth.user = app_helper.credentials.db_username;
+    options.auth.password = app_helper.credentials.db_password;
+  }
+  MongoClient.connect(mongoUri, options, function(err, db) {
     if (err) console.error(err);
-    var dbo = db.db("epic");
+    var dbo = db.db(app_helper.dbName);
     dbo.collection("migrations").countDocuments({}, function(err, numOfDocs){
       if (err) console.error(err);
       db.close();
