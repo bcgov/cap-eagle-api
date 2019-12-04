@@ -173,8 +173,11 @@ async function mongooseConnect() {
 // we only wish to run migrations on databases which have never run migrations before
 async function checkMigrations(callback) {
   checkMongoUri();
-  let options = {};
-  if (!_.isEmpty(app_helper.credentials)) {
+  let options;
+  if ((!_.isEmpty(app_helper.credentials)) 
+   && (!_.isEmpty(app_helper.credentials.db_username)) 
+   && (!_.isEmpty(app_helper.credentials.db_password))) {
+    options = {};
     let auth = {};
     auth.user = app_helper.credentials.db_username;
     auth.password = app_helper.credentials.db_password;
@@ -186,16 +189,17 @@ async function checkMigrations(callback) {
     const runMigrations = 0;
     const migrationsCollectionName = "migrations";
     let mcn = migrationsCollectionName;
-    let collections = dbo.getCollectionNames();
-    if ((_.isEmpty(collections)) || (!collections.includes(mcn))) {
-      dbo.createCollection(mcn, function(err, res) {
-        if (err) console.error(err);
-        console.log(mcn + " collection created");
-        db.close();
-        callback(runMigrations);
-      });
-      return;
-    }
+    dbo.listCollections({name: mcn}).toArray(function(err, collInfos) {
+      if (0 == collInfos.length) {
+        dbo.createCollection(mcn, function(err, res) {
+          if (err) console.error(err);
+          console.log(mcn + " collection created");
+          db.close();
+          callback(runMigrations);
+        });
+        return;
+      }
+    });
     dbo.collection(mcn).countDocuments({}, function(err, numOfDocs){
       if (err) console.error(err);
       db.close();
