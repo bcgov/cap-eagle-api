@@ -419,6 +419,12 @@
       "value": "172.50.0.2:5000"
     },
     {
+      "name": "NODE_ENV",
+      "displayName": "Node Environment",
+      "description": "Environment for running node. Toggle 'production' or 'development'.",
+      "value": "production"
+    },
+    {
       "name": "MONGO_IMAGE_NAMESPACE",
       "displayName": "Mongo image namespace",
       "description": "The OpenShift Namespace where the mongo ImageStream resides.",
