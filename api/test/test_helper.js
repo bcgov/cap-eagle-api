@@ -209,6 +209,8 @@ async function checkMigrations(callback) {
 }
 
 async function runMigrations(migrationCount) {
+  let genSettings = await dataGenerationSettings;
+  if (!genSettings.save_to_persistent_mongo) return;
   if (0 < migrationCount) return;
   checkMongoUri();
   await exec("./node_modules/db-migrate/bin/db-migrate up", function(err, stdout, stderr) {
