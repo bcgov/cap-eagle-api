@@ -165,10 +165,6 @@
                 ],
                 "env": [
                   {
-                    "name": "NODE_ENV",
-                    "value": "${NODE_ENV}"
-                  },
-                  {
                     "name": "MONGODB_USERNAME",
                     "value": "${DATABASE_USER}"
                   },
@@ -421,12 +417,6 @@
       "displayName": "Openshift Registry",
       "description": "The location:port where the Openshift serves images from (eg 'docker-registry.default.svc:5000').",
       "value": "172.50.0.2:5000"
-    },
-    {
-      "name": "NODE_ENV",
-      "displayName": "Node Environment",
-      "description": "Environment for running node. Toggle 'production' or 'development'.",
-      "value": "production"
     },
     {
       "name": "MONGO_IMAGE_NAMESPACE",
