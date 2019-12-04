@@ -211,8 +211,9 @@ async function checkMigrations(callback) {
 async function runMigrations(migrationCount) {
   let genSettings = await dataGenerationSettings;
   if (!genSettings.save_to_persistent_mongo) return;
-  if (0 < migrationCount) return;
   checkMongoUri();
+  if (-1 == mongoUri.indexOf("localhost")) return;  // TODO make this work in both memory-server instances and on deployments via database.json
+  if (0 < migrationCount) return;
   await exec("./node_modules/db-migrate/bin/db-migrate up", function(err, stdout, stderr) {
     if (err) console.error(err);
   });
