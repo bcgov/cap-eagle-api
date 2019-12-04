@@ -174,8 +174,10 @@ async function checkMigrations(callback) {
   checkMongoUri();
   let options = {};
   if (!_.isEmpty(app_helper.credentials)) {
-    options.auth.user = app_helper.credentials.db_username;
-    options.auth.password = app_helper.credentials.db_password;
+    let auth = {};
+    auth.user = app_helper.credentials.db_username;
+    auth.password = app_helper.credentials.db_password;
+    options.auth = auth;
   }
   MongoClient.connect(mongoUri, options, function(err, db) {
     if (err) console.error(err);
