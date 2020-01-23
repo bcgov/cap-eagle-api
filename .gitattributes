@@ -1,7 +1,5 @@
 # Auto detect text files and perform LF normalization
-* text=auto !eol
-
-# Exceptions for windows
+* text eol=lf
 *.[bB][aA][tT] text eol=crlf
 
 # Binary archive files
