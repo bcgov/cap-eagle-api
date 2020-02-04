@@ -57,7 +57,6 @@ afterEach(done => {
 });
 
 afterAll(async () => {
-  console.log("here8");
   let genSettings = await dataGenerationSettings;
   console.log("afterAll:: genSettings = " + genSettings);
   console.log("afterAll:: mongoose.connection = " + mongoose.connection);
