@@ -273,7 +273,7 @@ function generateChildSets(parents, usersPool, listsPool, factoryTemplate) {
       try{
         childGenerationPromises = parents.map(parent => {
           console.debug(factoryTemplate.factoryKey + " parent._id='" + parent._id.toString() + "'");
-          let deterministicSeed = faker.seed(generateDeterministicSeed(factoryTemplate.seed, parent._id));
+          let deterministicSeed = factory_helper.generateDeterministicSeed(factoryTemplate.seed, parent._id);
           console.debug(factoryTemplate.factoryKey + " deterministicSeed=" + deterministicSeed);
           let buildOptions = {faker: getSeeded(genSettings.generate_consistent_data, deterministicSeed), usersPool: usersPool, listsPool: listsPool}
           return generateChildSet(parent, buildOptions, factoryTemplate);
@@ -302,7 +302,7 @@ function generateChildSetsUsingPipeline(parents, pipeline, factoryTemplate) {
         let childGenerationPromises = parents.map(parent => {
           try{
             console.debug(factoryTemplate.factoryKey + " parent._id='" + parent._id.toString() + "'");
-            let deterministicSeed = faker.seed(generateDeterministicSeed(factoryTemplate.seed, parent._id));
+            let deterministicSeed = factory_helper.generateDeterministicSeed(factoryTemplate.seed, parent._id);
             console.debug(factoryTemplate.factoryKey + " deterministicSeed=" + deterministicSeed);
             let buildOptions = {faker: getSeeded(genSettings.generate_consistent_data, factoryTemplate.seed), pipeline: pipeline};
             return generateChildSet(parent, buildOptions, factoryTemplate);
@@ -330,7 +330,8 @@ function generateChildSet(parent, buildOptions, factoryTemplate) {
   return new Promise(function(resolve, reject) {
     test_helper.dataGenerationSettings.then(genSettings => {
       if (genSettings.generate_consistent_data) {
-        faker.seed(generateDeterministicSeed(factoryTemplate.seed, parent._id));
+        let deterministicSeed = factory_helper.generateDeterministicSeed(factoryTemplate.seed, parent._id);
+        faker.seed(deterministicSeed)
       } else {
         faker.seed();
       }
