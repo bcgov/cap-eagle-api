@@ -354,6 +354,8 @@ function getSeeded(setConstant, seed) {
   return (setConstant) ? (require('faker/locale/en')).seed(seed) : (require('faker/locale/en')).seed();
 };
 
+// the factories return all kinds of array nesting and for our generation usage we wish to deal with straight arrays 
+// that we can easily run map functions on.  flatten out any nested arrays factory-girl gives us.
 function normalizeFactoryResults(bumpyArrays) {
   console.debug("bumpyArrays.length: " + bumpyArrays.length);
   console.debug("bumpyArrays: " + bumpyArrays);
