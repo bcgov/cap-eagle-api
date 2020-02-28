@@ -52,13 +52,10 @@ describe('Generate Test Data', () => {
                 const projectDocuments = documents.filter(document => document.project == project._id);
                 defaultLog.debug("projectDocuments.length = " + projectDocuments.length);
                 projectDocuments.map((p_document) => {
-                  // defaultLog.info('document: [' + document + ']');
+                  defaultLog.debug('document: [' + document + ']');
                   defaultLog.verbose('Document [id, project, documentFileName]: [' + p_document._id + ', ' + p_document.project + ', ' + p_document.documentFileName + ']');
                 });
               }
-              
-              //TODO:: Check the outputted deterministic data fields against the database model.  Some fields will always have randomness so tests will have to be designed around that.
-              
               done();
             });
           });
